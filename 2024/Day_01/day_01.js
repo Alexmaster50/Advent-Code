@@ -24,7 +24,7 @@ function partOne(input) {
 	listLeft.sort((a, b) => a - b);
 	listRight.sort((a, b) => a - b);
 
-	// Calculate the total difference between the left and right tlists
+	// Calculate the total difference between the left and right lists
 	for (let i = 0; i < listLeft.length; i++) {
 		totalDifference += Math.abs(listLeft[i] - listRight[i]);
 	}
