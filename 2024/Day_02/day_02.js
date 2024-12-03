@@ -114,14 +114,16 @@ function partTwo(input) {
 
 	let listGoodRedos = [];
 
+	let savingInput = [];
 
 
-	//console.log("\n\n---- PART TWO -- TESTING BEGIN ---- \n\n")
 
-	//console.log("input amount: ", input.length, "\n\n")
+	console.log("\n\n--------- PART TWO -- TESTING BEGIN --------- \n\n")
+
+	console.log("input amount: ", input.length, "\n\n")
 
 	for (let i = 0; i < input.length; i++) {
-		const currentLine = input[i].split(" ").map(Number);
+		let currentLine = input[i].split(" ").map(Number);
 		arrayLines.push(currentLine)
 		//console.log(arrayLines)
 
@@ -134,21 +136,22 @@ function partTwo(input) {
 
 
 
-
-
 		reattempt = 0;
 		reattemptOccured = 0;
 		savingNumber = 0;
+		savingInput = [];
 
 		for (let j = 0; j < currentLine.length; j++) {
 			if (j == 0) {
 				previousNumber = arrayLines[i][j]
-				//console.log("j - ", j, " - ", previousNumber)
+				console.log("j - ", j, " - ", previousNumber)
 				lastChangeDirection = 0
 				thisChangeDirection = 0
 
 
 			} else {
+
+				
 
 				currentNumber = arrayLines[i][j]
 				previousNumber = arrayLines[i][j - 1]
@@ -156,68 +159,92 @@ function partTwo(input) {
 
 				levelDifference = Math.abs(currentNumber - previousNumber);
 
-				/*
+				
 				if(reattemptOccured == 1){
 					console.log("j - ", j, " - ", currentNumber, " - ", levelDifference)
 				}
-				*/
+				
 
 				numbericDifference = -previousNumber + currentNumber;
 
 
 				if (numbericDifference > 3) {
-					//console.log("UNSAFE - Changed too much");
+					console.log("UNSAFE - Changed too much");
 					reattempt = 1;
 				}
-				else if (numbericDifference > 0) {
-					//console.log("Safe? Increased");
-					thisChangeDirection = 1;
-				}
 				else if (numbericDifference == 0) {
-					//console.log("UNSAFE - unchanged");
+					console.log("UNSAFE - unchanged");
 					reattempt = 1;
 				}
 				else if (numbericDifference < -3) {
-					//console.log("UNSAFE - Changed too much");
+					console.log("UNSAFE - Changed too much");
 					reattempt = 1;
 				}
+				else if (numbericDifference > 0) {
+					console.log("Safe? Increased");
+					thisChangeDirection = 1;
+				}
 				else if (numbericDifference < 0) {
-					//console.log("Safe? Decresed");
+					console.log("Safe? Decresed");
 					thisChangeDirection = -1;
 				}
 
 
 
 				if ((lastChangeDirection + thisChangeDirection) == 0) {
-					//console.log("UNSAFE - direction changed"); 
+					console.log("UNSAFE - direction changed"); 
 					reattempt = 1;
 				}
 
 				if (reattempt == 1 && reattemptOccured == 0) {
-					//console.log("1st fail at:",currentLine[j])
-					//console.log("pre-splice:", currentLine)
+					//console.log("TEST- CASE- ALPHA", arrayLines[i])
+					savingInput = arrayLines[i].slice();
+					//console.log("TEST- CASE- BRAVO", savingInput)
+					console.log("1st fail at:",currentLine[j-1])
+					console.log("j index:",j)
+					console.log("pre-splice:", currentLine)
+					arrayLines[i] = currentLine;
 					savingNumber = currentLine[j]
 					currentLine.splice(j, 1)
-					//console.log("post-splice:", currentLine)
+					console.log("post-splice:", currentLine)
 					j = -1;
 					reattempt = 0;
 					reattemptOccured++;
-					//console.log("redo triggered\n\n")
+					console.log("redo triggered\n\n")
 					redosOccured++;
 				}
 				else if (reattempt == 1 && reattemptOccured == 1) {
-					//console.log("2nd fail at:",currentLine[j])
-					//console.log("pre-splice:", currentLine)
+					console.log("TEST- CASE- ALPHA", arrayLines[i])
+					console.log("TEST- CASE- BRAVO", savingInput)
+					console.log("2nd fail at:",currentLine[j-1])
+					console.log("pre-splice:", currentLine)
 					currentLine.splice(j - 1, 1, savingNumber)
-					//console.log("post-splice:", currentLine)
+					console.log("post-splice:", currentLine)
 					j = -1;
 					reattempt = 0;
 					reattemptOccured++;
-					//console.log("redo TWO\n\n")
+					console.log("redo TWO\n\n")
 					redosOccured++;
 				}
-				else if (reattempt == 1 && reattemptOccured == 2) {
-					//console.log("breaking")
+				else if(reattempt == 1 && reattemptOccured == 2){
+					arrayLines[i] = savingInput.slice();
+					currentLine = savingInput.slice();
+					console.log("TESTING",currentLine,arrayLines[i],savingInput)
+					currentLine = arrayLines[i];
+					console.log("3rd fail at:",currentLine[j-1])
+					console.log("j index:",j)
+					console.log("pre-splice:", currentLine)
+					currentLine.splice(j-2, 1)
+					console.log("post-splice:", currentLine)
+					j = -1;
+					reattempt = 0;
+					reattemptOccured++;
+					console.log("redo THREE\n\n")
+					redosOccured++;
+
+				}
+				else if (reattempt == 1 && reattemptOccured == 3) {
+					console.log("breaking")
 					break;
 				}
 
@@ -227,17 +254,17 @@ function partTwo(input) {
 
 			if ((j == (currentLine.length - 1)) && reattemptOccured >= 1) {
 				goodRedoAttempts++;
-				//console.log("good redo")
+				console.log("good redo")
 			}
 
 			if (j == (currentLine.length - 1)) {
 				safeReportAmount++;
-				//console.log("safety incremented")
+				console.log("[!!] safety incremented")
 			}
 		}
 
-		//console.log(i, " -> ", currentLine, "\n\n")
-		//console.log("------------------\n")
+		console.log(i, " -> ", currentLine, "\n\n")
+		console.log("------------------\n")
 
 	}
 
